@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded' , ()=> {
+  // const targets the containing div
   const grid = document.querySelector('.grid');
-
+  // Array.from turns all 200 HTML divs into an array containing 200 div elements, accessible through an index number (0 - 199)
   let squares = Array.from(document.querySelectorAll('.grid div'));
-
+  // a JS variable to access the HTML element with ID "score"
   const ScoreDisplay = document.querySelector('#score');
-
+  // same for HTML element with ID "start-button"
   const StartBtn = document.querySelector('#start-button');
-  
+  // set the width of a single div to a constant, to be used later
   const width = 10;
 
   // The Tetrominoes

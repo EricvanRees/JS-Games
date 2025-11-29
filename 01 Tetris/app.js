@@ -106,17 +106,20 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     }
   }
 
-  // move the tetromino left, unless it is at the edge or there is a blockage
+  // move the Tetromino left by undrawing it and drawing it again, unless it is at the edge or there is a blockage 
   function moveLeft() {
+    // before starting, undraw the Tetromino at its current location
     undraw()
+    // define the left edge and if the shape is in it using modulus
+    // .some checks if one of the shapes in the "current" array touches the left edge:
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
-
+    // only allow a shape to move left if its position does not touch the left edge:
     if(!isAtLeftEdge) currentPosition -=1;
-
+    // stop the Tetromino if there's already one at its position and push it back one space to the right
     if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
       currentPosition += 1;
     }
-
+    // after pushing it back one space, draw the shape:
     draw();
   }
 

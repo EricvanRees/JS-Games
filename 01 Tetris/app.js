@@ -123,6 +123,21 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     draw();
   }
 
+  // move the tetromino right, unless it is at the edge or there is a blockage
+  function moveRight() {
+    // undraw the current shape
+    undraw()
+    // check if the shape touches the right edge
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
+    // move  shape to the right if it does not touch the right edge
+    if(!isAtRightEdge) currentPosition += 1
+    // change position of the shape if it touches a div with a class of 'taken'
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      currentPosition -= 1
+    }
+    // finally, draw the shape on the screen
+    draw();
+  }
 
 
 })

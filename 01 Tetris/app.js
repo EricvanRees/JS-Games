@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     if(e.keyCode === 37) {
       moveLeft()
     } else if (e.keyCode === 38) {
-      // rotate()
+      rotate()
     } else if (e.keyCode === 39) {
       moveRight()
     } else if (e.keyCode === 40) {
@@ -137,6 +137,18 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     }
     // finally, draw the shape on the screen
     draw();
+  }
+
+  // rotate the Tetromino
+  function rotate() {
+    undraw()
+    currentPosition++
+    // if the current rotation gets to 4, make it go back to zero
+    if(currentRotation === current.length) {
+      currentPosition = 0
+    }
+    current = theTetrominoes[random][currentPosition]
+    draw()
   }
 
 

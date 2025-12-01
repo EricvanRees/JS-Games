@@ -3,14 +3,15 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   const grid = document.querySelector('.grid');
   // Array.from turns all 200 HTML divs into an array containing 200 div elements, accessible through an index number (0 - 199)
   let squares = Array.from(document.querySelectorAll('.grid div'));
-  // a JS variable to access the HTML element with ID "score"
-  const ScoreDisplay = document.querySelector('#score');
+  // a JS variable to access the HTML element with ID "score" 
+  const scoreDisplay = document.querySelector('#score');
   // same for HTML element with ID "start-button"
-  const StartBtn = document.querySelector('#start-button');
+  const startBtn = document.querySelector('#start-button');
   // set the width of a single div to a constant, to be used later
   const width = 10;
   // used in display and freeze functions below:
   let nextRandom = 0;
+  let timerId;
 
   // The Tetrominoes
   const lTetromino = [
@@ -72,21 +73,22 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   } 
 
   // make the tetromino move down every second
-  timerId = setInterval(moveDown, 1000);
+ //  timerId = setInterval(moveDown, 1000);
 
   // assign functions to keyCodes
   function control(e) {
     if(e.keyCode === 37) {
-      moveLeft()
+      moveLeft();
     } else if (e.keyCode === 38) {
-      rotate()
+      rotate();
     } else if (e.keyCode === 39) {
-      moveRight()
+      moveRight();
     } else if (e.keyCode === 40) {
-      moveDown()
+      moveDown();
     }
   }
-  document.addEventListener('keyup', control)
+
+  document.addEventListener('keyup', control);
 
   // move down function
   function moveDown() {
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
       current.forEach(index => squares[currentPosition + index].classList.add('taken'));
       // start a new tetromonio falling
       // nextRandom has a default value of zero, and is set to "random":
-      // random = nextRandom
+      random = nextRandom
       // nextRandom is set to a new, random value and used when displayShape is called below to select a random shape for the mini-grid:
       nextRandom = Math.floor(Math.random() * theTetrominoes.length);
       // "nextRandom" is now interchanged with "random" below:
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   // move the Tetromino left by undrawing it and drawing it again, unless it is at the edge or there is a blockage 
   function moveLeft() {
     // before starting, undraw the Tetromino at its current location
-    undraw()
+    undraw();
     // define the left edge and if the shape is in it using modulus
     // .some checks if one of the shapes in the "current" array touches the left edge:
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
@@ -133,7 +135,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   // move the tetromino right, unless it is at the edge or there is a blockage
   function moveRight() {
     // undraw the current shape
-    undraw()
+    undraw();
     // check if the shape touches the right edge
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1)
     // move  shape to the right if it does not touch the right edge
@@ -148,14 +150,14 @@ document.addEventListener('DOMContentLoaded' , ()=> {
 
   // rotate the Tetromino
   function rotate() {
-    undraw()
-    currentPosition++
+    undraw();
+    currentRotation ++;
     // if the current rotation gets to 4, make it go back to zero
     if(currentRotation === current.length) {
-      currentPosition = 0
+      currentRotation = 0;
     }
-    current = theTetrominoes[random][currentPosition]
-    draw()
+    current = theTetrominoes[random][currentRotation];
+    draw();
   }
 
   // show up-next Tetromino in mini-grid display
@@ -188,6 +190,18 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     })
   }
 
+  // add functionality to the button
+  startBtn.addEventListener('click', ()=> {
+    if (timerId) {
+      clearInterval(timerId)
+      timerId = null;
+    } else {
+      draw();
+      timerId = setInterval(moveDown, 1000);
+      nextRandom = Math.floor(Math.random() * theTetrominoes.length);
+      displayShape();
+    }
+  })
   
 })
 

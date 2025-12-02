@@ -12,10 +12,13 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   // used in display and freeze functions below:
   let nextRandom = 0;
   let timerId;
+  let score = 0;
+  let colors = ['orange', 'red', 'purple', 'green', 'blue'];
+
 
   // The Tetrominoes
   const lTetromino = [
-    [1, width+1, width*2+1, 2], // 01 11 21 02
+    [1, width+1, width*2+1, 2], 
     [width, width+1, width+2, width*2+2],
     [1, width+1, width*2+1, width*2],
     [width, width*2, width*2+1, width*2+2]
@@ -60,15 +63,18 @@ document.addEventListener('DOMContentLoaded' , ()=> {
 
   // draw first rotation in the first tetromino
   function draw() {
-     current.forEach(index => {
+      current.forEach(index => {
       squares[currentPosition + index].classList.add('tetromino'); 
-    })
+      squares[currentPosition + index].style.backgroundColor = colors[random]; 
+      }) 
   }
+
 
   // undraw the Tetromino
   function undraw() {
     current.forEach(index => {
       squares[currentPosition + index].classList.remove('tetromino');
+      squares[currentPosition + index].style.backgroundColor = '';
     })
   } 
 
@@ -113,6 +119,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
       draw();
       displayShape();
       addScore();
+      gameOver();
     }
   }
 
@@ -185,9 +192,11 @@ document.addEventListener('DOMContentLoaded' , ()=> {
     // remove any trace of a tetromino from the entire grid
      displaySquares.forEach(square => {
       square.classList.remove('tetromino'); 
+      square.style.backgroundColor = '';
     })
     upNextTetrominoes[nextRandom].forEach(index => {
       displaySquares[displayIndex + index].classList.add('tetromino');
+      displaySquares[displayIndex + index].style.backgroundColor = colors[4];
     })
   }
 
@@ -209,8 +218,7 @@ document.addEventListener('DOMContentLoaded' , ()=> {
   })
 
   // add score
-  let score = 0;
-  function addScore() {
+  function addScore() {    
     
     for (let i = 0; i < 199; i +=width) {
       const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
@@ -222,12 +230,21 @@ document.addEventListener('DOMContentLoaded' , ()=> {
         row.forEach(index => {
           squares[index].classList.remove('taken')
           squares[index].classList.remove('tetromino')
+          squares[index].style.backgroundColor = '';
         })
         const squaresRemoved = squares.splice(i, width)
         // append removed squares to grid so it stays the same size
         squares = squaresRemoved.concat(squares);
         squares.forEach(cell => grid.appendChild(cell))
       }
+    }
+  }
+
+  // game over function
+  function gameOver() {
+    if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      scoreDisplay.innerHTML = 'end'
+      clearInterval(timerId);
     }
   }
   
